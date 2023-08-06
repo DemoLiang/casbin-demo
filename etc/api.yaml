@@ -2,6 +2,9 @@ Name: api
 Host: 0.0.0.0
 Port: 8888
 
+Log:
+  Mode: console
+
 Mysql:
   DataSource: "root:123456@tcp(127.0.0.1:3306)/casbin?charset=utf8&parseTime=True&loc=Local&timeout=1000ms"
   Active: 100

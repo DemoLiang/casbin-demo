@@ -15,6 +15,7 @@
 package casbin
 
 import (
+	"gorm.io/gorm"
 	"log"
 
 	"github.com/casbin/casbin/v2"
@@ -27,14 +28,29 @@ import (
 	"github.com/zeromicro/go-zero/core/stores/redis"
 )
 
+type CasbinRule struct {
+	ID    uint   `gorm:"primaryKey;autoIncrement"`
+	Ptype string `gorm:"size:100;uniqueIndex:unique_index"`
+	V0    string `gorm:"size:100;uniqueIndex:unique_index"`
+	V1    string `gorm:"size:100;uniqueIndex:unique_index"`
+	V2    string `gorm:"size:100"`
+	V3    string `gorm:"size:100"`
+	V4    string `gorm:"size:100"`
+	V5    string `gorm:"size:100"`
+}
+
+func (CasbinRule) TableName() string {
+	return "casbin_rule"
+}
+
 // CasbinConf is the configuration structure for Casbin
 type CasbinConf struct {
 	ModelText string `json:"ModelText,optional,env=CASBIN_MODEL_TEXT"`
 }
 
 // NewCasbin returns Casbin enforcer.
-func (l CasbinConf) NewCasbin(dbType, dsn string) (*casbin.Enforcer, error) {
-	adapter, err := gormadapter.NewAdapter(dbType, dsn)
+func (l CasbinConf) NewCasbin(dbType string, ormDB *gorm.DB) (*casbin.Enforcer, error) {
+	adapter, err := gormadapter.NewAdapterByDBWithCustomTable(ormDB, &CasbinRule{})
 	logx.Must(err)
 
 	var text string
@@ -72,8 +88,8 @@ func (l CasbinConf) NewCasbin(dbType, dsn string) (*casbin.Enforcer, error) {
 }
 
 // MustNewCasbin returns Casbin enforcer. If there are errors, it will exist.
-func (l CasbinConf) MustNewCasbin(dbType, dsn string) *casbin.Enforcer {
-	csb, err := l.NewCasbin(dbType, dsn)
+func (l CasbinConf) MustNewCasbin(dbType string, ormDB *gorm.DB) *casbin.Enforcer {
+	csb, err := l.NewCasbin(dbType, ormDB)
 	if err != nil {
 		logx.Errorw("initialize Casbin failed", logx.Field("detail", err.Error()))
 		log.Fatalf("initialize Casbin failed, error: %s", err.Error())
@@ -103,8 +119,8 @@ func (l CasbinConf) MustNewRedisWatcher(c redis.RedisConf, f func(string2 string
 }
 
 // MustNewCasbinWithRedisWatcher returns Casbin Enforcer with Redis watcher.
-func (l CasbinConf) MustNewCasbinWithRedisWatcher(dbType, dsn string, c redis.RedisConf) *casbin.Enforcer {
-	cbn := l.MustNewCasbin(dbType, dsn)
+func (l CasbinConf) MustNewCasbinWithRedisWatcher(dbType string, ormDB *gorm.DB, c redis.RedisConf) *casbin.Enforcer {
+	cbn := l.MustNewCasbin(dbType, ormDB)
 	w := l.MustNewRedisWatcher(c, func(data string) {
 		rediswatcher.DefaultUpdateCallback(cbn)(data)
 	})
