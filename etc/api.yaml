@@ -3,7 +3,7 @@ Host: 0.0.0.0
 Port: 8888
 
 Mysql:
-  DataSource: root:123456@tcp(127.0.0.1:3306)/casbin?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+  DataSource: "root:123456@tcp(127.0.0.1:3306)/casbin?charset=utf8&parseTime=True&loc=Local&timeout=1000ms"
   Active: 100
   Idle: 10
   IdleTimeout: 24
@@ -12,6 +12,6 @@ CasbinConf:
   ModelText: ""
 
 RedisConf:
-  Host: 127.0.0.1:6379
-  Pass: 123456
-  Type: node
+  Host: "127.0.0.1:6379"
+  Pass: "123456"
+  Type: "node"

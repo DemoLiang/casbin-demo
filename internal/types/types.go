@@ -2,9 +2,9 @@
 package types
 
 type Request struct {
-	Sub string `json:"subt"`
-	Obj string `json:"obj"`
-	Act string `json:"act"`
+	Sub string `json:"subt"` //用户所属的角色
+	Obj string `json:"obj"`  //用户需要查看机器人ID
+	Act string `json:"act"`  //用户需要的动作，默认是read
 }
 
 type Response struct {

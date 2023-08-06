@@ -32,6 +32,7 @@ func (l *HelloLogic) Hello(req *types.Request) (resp *types.Response, err error)
 		return resp, nil
 	}
 	resp.Message = fmt.Sprintf("%v", res)
+	l.Logger.Infof("hello: %v err:%v", res, err)
 
 	return resp, nil
 }

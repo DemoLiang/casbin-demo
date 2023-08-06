@@ -11,7 +11,7 @@ type ServiceContext struct {
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
-	cbn := c.CasbinConf.MustNewCasbinWithRedisWatcher("mysql", c.Mysql.DataSource, c.RedisConf, c.CasbinConf.ModelText)
+	cbn := c.CasbinConf.MustNewCasbinWithRedisWatcher("mysql", c.Mysql.DataSource, c.RedisConf)
 	return &ServiceContext{
 		Config: c,
 		Cbn:    cbn,

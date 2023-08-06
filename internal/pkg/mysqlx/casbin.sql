@@ -8,6 +8,6 @@ CREATE TABLE IF NOT EXISTS casbin_rule (
     v2 VARCHAR(100),
     v3 VARCHAR(100),
     v4 VARCHAR(100),
-    v5 VARCHAR(100)
-    PRIMARY KEY (`id`),
-);ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    v5 VARCHAR(100),
+    PRIMARY KEY (`id`)
+    );ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
